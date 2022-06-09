@@ -1,5 +1,8 @@
 const RENDER_EVENT = 'render-book';
-const books = [];
+
+let books = [];
+let formMode = 'CREATE';
+let bookIdEdit = '';
 
 function isStorageExist() {
 	if (typeof Storage === undefined) {
@@ -26,17 +29,27 @@ function generateBookObject(id, bookTitle, bookAuthor, bookYear, isCompleted) {
 	};
 }
 
-function addBook(bookStatus) {
+function getBookFormFieldValue() {
 	const bookTitle = document.getElementById('inputBookTitle').value;
 	const bookAuthor = document.getElementById('inputBookAuthor').value;
 	const bookYear = document.getElementById('inputBookYear').value;
+	const bookCheckbox = document.getElementById('inputBookIsCompleteCheckbox').checked;
 
-	const generatedId = generateId();
-	const bookObject = generateBookObject(generatedId, bookTitle, bookAuthor, bookYear, bookStatus);
+	return { bookTitle, bookAuthor, bookYear, bookCheckbox };
+}
 
-	books.push(bookObject);
+function setBookFormFieldValue(title, author, year, status) {
+	const bookTitle = document.getElementById('inputBookTitle');
+	bookTitle.value = title;
 
-	document.dispatchEvent(new Event(RENDER_EVENT));
+	const bookAuthor = document.getElementById('inputBookAuthor');
+	bookAuthor.value = author;
+
+	const bookYear = document.getElementById('inputBookYear');
+	bookYear.value = year;
+
+	const inputBookIsCompleteCheckbox = document.getElementById('inputBookIsCompleteCheckbox');
+	inputBookIsCompleteCheckbox.checked = status;
 }
 
 function makeTdElement(cssClass) {
@@ -142,6 +155,48 @@ function removeBookFromCollection(bookId) {
 	document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
+function getBookDataToEdit(bookId) {
+	const bookTarget = findBook(bookId);
+
+	if (bookTarget === null) return;
+
+	const { id, bookTitle, bookAuthor, bookYear, isCompleted } = bookTarget;
+
+	setBookFormFieldValue(bookTitle, bookAuthor, bookYear, isCompleted);
+
+	formMode = 'UPDATE';
+	bookIdEdit = id;
+}
+
+function addBook() {
+	const { bookTitle, bookAuthor, bookYear, bookCheckbox } = getBookFormFieldValue();
+	const generatedId = generateId();
+	const bookObject = generateBookObject(generatedId, bookTitle, bookAuthor, bookYear, bookCheckbox);
+
+	books.push(bookObject);
+
+	document.dispatchEvent(new Event(RENDER_EVENT));
+
+	setBookFormFieldValue('', '', '', false);
+}
+
+function updateBook(bookId) {
+	const bookTarget = findBookIndex(bookId);
+
+	if (bookTarget === -1) return;
+
+	const { bookTitle, bookAuthor, bookYear, bookCheckbox } = getBookFormFieldValue();
+	const updatedBook = { ...books[bookTarget], bookTitle, bookAuthor, bookYear, isCompleted: bookCheckbox };
+
+	books = [...books.slice(0, bookTarget), updatedBook, ...books.slice(bookTarget + 1)];
+
+	document.dispatchEvent(new Event(RENDER_EVENT));
+
+	setBookFormFieldValue('', '', '', false);
+	bookIdEdit = '';
+	formMode = 'CREATE';
+}
+
 function makeBookActionButton(bookId, bookIsCompleted) {
 	const buttonElement = document.createElement('button');
 	buttonElement.setAttribute('type', 'button');
@@ -222,6 +277,9 @@ function makeActionButton(bookId) {
       />
     </svg>
   `;
+	editButtonElement.addEventListener('click', function () {
+		getBookDataToEdit(bookId);
+	});
 
 	const deleteButtonElement = document.createElement('button');
 	deleteButtonElement.classList.add('action-button');
@@ -284,10 +342,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	inputBookForm.addEventListener('submit', function (event) {
 		event.preventDefault();
 
-		if (inputBookIsCompleteCheckbox.checked) {
-			addBook(true);
+		if (formMode === 'CREATE') {
+			addBook();
 		} else {
-			addBook(false);
+			updateBook(bookIdEdit);
 		}
 	});
 });

@@ -1,4 +1,3 @@
-// https://assets.justinmind.com/wp-content/webp-express/webp-images/uploads/2019/10/list-ui-design-cflow-journal.png.webp
 const RENDER_EVENT = 'render-book';
 const books = [];
 
@@ -106,6 +105,16 @@ function findBook(bookId) {
 	return null;
 }
 
+function findBookIndex(bookId) {
+	for (const index in books) {
+		if (books[index].id === bookId) {
+			return index;
+		}
+	}
+
+	return -1;
+}
+
 function removeBookFromCompleted(bookId) {
 	const bookTarget = findBook(bookId);
 
@@ -121,6 +130,15 @@ function addBookToCompleted(bookId) {
 	if (bookTarget === null) return;
 
 	bookTarget.isCompleted = true;
+	document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+function removeBookFromCollection(bookId) {
+	const bookTarget = findBookIndex(bookId);
+
+	if (bookTarget === -1) return;
+
+	books.splice(bookTarget, 1);
 	document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
@@ -175,16 +193,16 @@ function makeBookActionButton(bookId, bookIsCompleted) {
 	return buttonElement;
 }
 
-function makeActionButtonTd() {
+function makeActionButtonTd(bookId) {
 	const tdElement = makeTdElement(['pl-2', 'pr-6', 'py-6']);
-	const actionButton = makeActionButton();
+	const actionButton = makeActionButton(bookId);
 
 	tdElement.append(actionButton);
 
 	return tdElement;
 }
 
-function makeActionButton() {
+function makeActionButton(bookId) {
 	const container = document.createElement('div');
 	container.classList.add('flex', 'justify-center', 'gap-2');
 
@@ -222,6 +240,9 @@ function makeActionButton() {
       />
     </svg>
   `;
+	deleteButtonElement.addEventListener('click', function () {
+		removeBookFromCollection(bookId);
+	});
 
 	container.append(editButtonElement, deleteButtonElement);
 
@@ -232,7 +253,7 @@ function makeBook(bookObject) {
 	const bookTitleAndAuthorTd = makeBookTitleAndBookAuthorTd(bookObject.bookTitle, bookObject.bookAuthor);
 	const bookYearTd = makeBookYearTd(bookObject.bookYear);
 	const bookActionButtonTd = makeBookActionButtonTd(bookObject.id, bookObject.isCompleted);
-	const actionButtonTd = makeActionButtonTd();
+	const actionButtonTd = makeActionButtonTd(bookObject.id);
 
 	const tr = document.createElement('tr');
 	tr.classList.add('odd:bg-white', 'even:bg-slate-50');

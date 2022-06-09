@@ -108,6 +108,22 @@ function makeBookActionButtonTd(bookId, isCompleted) {
 	return tdElement;
 }
 
+function makeCancelEditButton() {
+	const cancelEditButton = document.createElement('button');
+	cancelEditButton.classList.add('secondary-button', 'rounded-full');
+	cancelEditButton.setAttribute('id', 'cancelEditButton');
+	cancelEditButton.setAttribute('type', 'button');
+	cancelEditButton.innerText = 'Batalkan edit';
+	cancelEditButton.addEventListener('click', function () {
+		formMode = 'CREATE';
+		bookIdEdit = '';
+		setBookFormFieldValue('', '', '', false);
+		cancelEditButton.remove();
+	});
+
+	return cancelEditButton;
+}
+
 function findBook(bookId) {
 	for (const book of books) {
 		if (book.id === bookId) {
@@ -161,7 +177,10 @@ function getBookDataToEdit(bookId) {
 	if (bookTarget === null) return;
 
 	const { id, bookTitle, bookAuthor, bookYear, isCompleted } = bookTarget;
+	const formButtonGroup = document.getElementById('submit-form-button-group');
+	const cancelEditButton = makeCancelEditButton();
 
+	formButtonGroup.append(cancelEditButton);
 	setBookFormFieldValue(bookTitle, bookAuthor, bookYear, isCompleted);
 
 	formMode = 'UPDATE';

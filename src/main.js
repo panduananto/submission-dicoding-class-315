@@ -217,6 +217,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		addBook();
 	});
+
+	const inputBookIsCompleteCheckbox = document.getElementById('inputBookIsCompleteCheckbox');
+	const bookCategoryText = document.getElementById('bookCategoryText');
+
+	inputBookIsCompleteCheckbox.addEventListener('change', function () {
+		if (inputBookIsCompleteCheckbox.checked) {
+			bookCategoryText.innerText = 'Selesai dibaca';
+		} else {
+			bookCategoryText.innerText = 'Belum selesai dibaca';
+		}
+	});
 });
 
 document.addEventListener(RENDER_EVENT, function () {

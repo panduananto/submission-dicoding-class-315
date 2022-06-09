@@ -25,7 +25,7 @@
 				<div class="col-span-2 self-start rounded-sm bg-white p-6 shadow-sm">
 					<section class="input_section">
 						<h2 class="text-xl font-semibold">Masukkan Buku Baru</h2>
-						<form id="inputBook" class="mt-4">
+						<form id="inputBook" class="mt-4 flex flex-col items-stretch">
 							<fieldset class="space-y-4">
 								<div class="flex flex-col">
 									<label for="inputBookTitle" class="text-sm font-medium text-gray-700">Judul</label>
@@ -56,15 +56,17 @@
 								</div>
 							</fieldset>
 							<div class="mt-4">
-								<label for="inputBookIsComplete" class="text-sm font-medium text-gray-700">Selesai dibaca</label>
+								<label for="inputBookIsCompleteCheckbox" class="mr-1 text-sm font-medium text-gray-700"
+									>Selesai dibaca</label
+								>
 								<input
-									id="inputBookIsComplete"
+									id="inputBookIsCompleteCheckbox"
 									type="checkbox"
 									class="text-purple-600 focus:border-purple-600 focus:ring-purple-600"
 								/>
 							</div>
-							<button id="bookSubmit" type="submit" class="primary-button mt-8 rounded-full">
-								Masuk ke rak <span>Belum selesai dibaca</span>
+							<button id="bookSubmitButton" type="submit" class="primary-button mt-8 rounded-full">
+								Masuk ke rak <span id="bookCategoryText">Belum selesai dibaca</span>
 							</button>
 						</form>
 					</section>

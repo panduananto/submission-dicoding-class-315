@@ -82,6 +82,38 @@
 							<button id="searchSubmit" type="submit" class="primary-button col-span-1 rounded-full">Cari</button>
 						</form>
 					</section>
+					<section class="book_shelf">
+						<h2 class="text-sm font-semibold text-gray-700">Belum selesai dibaca</h2>
+						<div class="relative mt-6 overflow-x-auto shadow-sm">
+							<table id="uncompleteBookshelfTable" class="relative w-full text-left text-sm text-gray-500">
+								<thead class="sr-only bg-white text-xs uppercase text-gray-700">
+									<tr>
+										<th scope="col" class="px-6 py-3">Book info</th>
+										<th scope="col" class="px-6 py-3">Year</th>
+										<th scope="col" class="px-6 py-3">Book action</th>
+										<th scope="col" class="px-6 py-3">Action</th>
+									</tr>
+								</thead>
+								<tbody id="uncompleteBookshelfList"></tbody>
+							</table>
+						</div>
+					</section>
+					<section class="book_shelf">
+						<h2 class="text-sm font-semibold text-gray-700">Selesai dibaca</h2>
+						<div class="relative mt-6 overflow-x-auto shadow-sm">
+							<table id="completeBookshelfTable" class="relative w-full text-left text-sm text-gray-500">
+								<thead class="sr-only bg-white text-xs uppercase text-gray-700">
+									<tr>
+										<th scope="col" class="px-6 py-3">Book info</th>
+										<th scope="col" class="px-6 py-3">Year</th>
+										<th scope="col" class="px-6 py-3">Book action</th>
+										<th scope="col" class="px-6 py-3">Action</th>
+									</tr>
+								</thead>
+								<tbody id="completeBookshelfList"></tbody>
+							</table>
+						</div>
+					</section>
 				</div>
 			</div>
 		</main>

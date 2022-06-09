@@ -26,13 +26,13 @@ function generateBookObject(id, bookTitle, bookAuthor, bookYear, isCompleted) {
 	};
 }
 
-function addBook() {
+function addBook(bookStatus) {
 	const bookTitle = document.getElementById('inputBookTitle').value;
 	const bookAuthor = document.getElementById('inputBookAuthor').value;
 	const bookYear = document.getElementById('inputBookYear').value;
 
 	const generatedId = generateId();
-	const bookObject = generateBookObject(generatedId, bookTitle, bookAuthor, bookYear, false);
+	const bookObject = generateBookObject(generatedId, bookTitle, bookAuthor, bookYear, bookStatus);
 
 	books.push(bookObject);
 
@@ -284,7 +284,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	inputBookForm.addEventListener('submit', function (event) {
 		event.preventDefault();
 
-		addBook();
+		if (inputBookIsCompleteCheckbox.checked) {
+			addBook(true);
+		} else {
+			addBook(false);
+		}
 	});
 });
 

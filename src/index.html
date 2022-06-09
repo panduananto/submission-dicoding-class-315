@@ -1,21 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Bookshelf Apps</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/dist/output.css" />
-  </head>
-  <body class="flex flex-col min-h-full font-inter">
-    <header class="flex items-center justify-center bg-purple-600 text-white py-4">
-      <h1 class="font-semibold">Bookshelf Apps</h1>
-    </header>
-    <main class="flex-1 bg-slate-100 p-6 lg:px-0"></main>
-    <footer class="flex items-center justify-center bg-purple-600 text-white py-4 font-semibold">2022</footer>
-    <script src="main.js"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+		/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Bookshelf Apps</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="/dist/output.css" />
+	</head>
+	<body class="flex min-h-full flex-col font-inter">
+		<header class="flex items-center justify-center bg-purple-600 py-4 text-white">
+			<h1 class="font-semibold">Bookshelf Apps</h1>
+		</header>
+		<main class="flex-1 bg-slate-100 py-8 px-6 lg:px-0">
+			<div class="mx-auto grid max-w-screen-lg grid-cols-6 gap-4">
+				<div class="col-span-2 self-start rounded-sm bg-white p-6 shadow-sm">
+					<section class="input_section">
+						<h2 class="text-xl font-semibold">Masukkan Buku Baru</h2>
+						<form id="inputBook" class="mt-4">
+							<fieldset class="space-y-4">
+								<div class="flex flex-col">
+									<label for="inputBookTitle" class="text-sm font-medium text-gray-700">Judul</label>
+									<input
+										id="inputBookTitle"
+										type="text"
+										required
+										class="mt-1 rounded-sm border border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
+									/>
+								</div>
+								<div class="flex flex-col">
+									<label for="inputBookAuthor" class="text-sm font-medium text-gray-700">Penulis</label>
+									<input
+										id="inputBookAuthor"
+										type="text"
+										required
+										class="mt-1 rounded-sm border border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
+									/>
+								</div>
+								<div class="flex flex-col">
+									<label for="inputBookYear" class="text-sm font-medium text-gray-700">Tahun</label>
+									<input
+										id="inputBookYear"
+										type="number"
+										required
+										class="mt-1 rounded-sm border border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
+									/>
+								</div>
+							</fieldset>
+							<div class="mt-4">
+								<label for="inputBookIsComplete" class="text-sm font-medium text-gray-700">Selesai dibaca</label>
+								<input
+									id="inputBookIsComplete"
+									type="checkbox"
+									class="text-purple-600 focus:border-purple-600 focus:ring-purple-600"
+								/>
+							</div>
+							<button
+								id="bookSubmit"
+								type="submit"
+								class="mt-8 w-full rounded-full bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+							>
+								Masuk ke rak <span>Belum selesai dibaca</span>
+							</button>
+						</form>
+					</section>
+				</div>
+			</div>
+		</main>
+		<footer class="flex items-center justify-center bg-purple-600 py-4 font-semibold text-white">2022</footer>
+		<script src="main.js"></script>
+	</body>
 </html>

@@ -81,13 +81,13 @@ function makeBookYearTd(year) {
 	return tdElement;
 }
 
-function makeBookActionButtonTd(isCompleted) {
+function makeBookActionButtonTd(bookId, isCompleted) {
 	const tdElement = makeTdElement(['px-2', 'py-6']);
 
 	const container = document.createElement('div');
 	container.classList.add('flex', 'justify-center');
 
-	const bookActionButton = makeBookActionButton(isCompleted);
+	const bookActionButton = makeBookActionButton(bookId, isCompleted);
 
 	container.append(bookActionButton);
 
@@ -96,27 +96,39 @@ function makeBookActionButtonTd(isCompleted) {
 	return tdElement;
 }
 
-function makeBookActionButton(isCompleted) {
+function findBook(bookId) {
+	for (const book of books) {
+		if (book.id === bookId) {
+			return book;
+		}
+	}
+
+	return null;
+}
+
+function removeBookFromCompleted(bookId) {
+	const bookTarget = findBook(bookId);
+
+	if (bookTarget === null) return;
+
+	bookTarget.isCompleted = false;
+	document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+function addBookToCompleted(bookId) {
+	const bookTarget = findBook(bookId);
+
+	if (bookTarget === null) return;
+
+	bookTarget.isCompleted = true;
+	document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+function makeBookActionButton(bookId, bookIsCompleted) {
 	const buttonElement = document.createElement('button');
 	buttonElement.setAttribute('type', 'button');
 
-	if (isCompleted) {
-		buttonElement.classList.add('complete-button');
-		buttonElement.innerHTML = `
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4 mr-2"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    `;
-	} else {
+	if (bookIsCompleted) {
 		buttonElement.classList.add('uncomplete-button');
 		buttonElement.innerHTML = `
       <svg
@@ -133,6 +145,31 @@ function makeBookActionButton(isCompleted) {
       </svg>
       Belum selesai
     `;
+		buttonElement.setAttribute('id', 'uncomplete-button');
+		buttonElement.addEventListener('click', function () {
+			removeBookFromCompleted(bookId);
+		});
+	} else {
+		buttonElement.classList.add('complete-button');
+		buttonElement.innerHTML = `
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Selesai baca
+    `;
+		buttonElement.setAttribute('id', 'complete-button');
+		buttonElement.addEventListener('click', function () {
+			addBookToCompleted(bookId);
+		});
 	}
 
 	return buttonElement;
@@ -194,7 +231,7 @@ function makeActionButton() {
 function makeBook(bookObject) {
 	const bookTitleAndAuthorTd = makeBookTitleAndBookAuthorTd(bookObject.bookTitle, bookObject.bookAuthor);
 	const bookYearTd = makeBookYearTd(bookObject.bookYear);
-	const bookActionButtonTd = makeBookActionButtonTd(bookObject.isCompleted);
+	const bookActionButtonTd = makeBookActionButtonTd(bookObject.id, bookObject.isCompleted);
 	const actionButtonTd = makeActionButtonTd();
 
 	const tr = document.createElement('tr');
@@ -210,14 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		loadDataFromLocalStorage();
 	}
 
-	const inputBookForm = document.getElementById('inputBook');
-
-	inputBookForm.addEventListener('submit', function (event) {
-		event.preventDefault();
-
-		addBook();
-	});
-
 	const inputBookIsCompleteCheckbox = document.getElementById('inputBookIsCompleteCheckbox');
 	const bookCategoryText = document.getElementById('bookCategoryText');
 
@@ -228,14 +257,30 @@ document.addEventListener('DOMContentLoaded', function () {
 			bookCategoryText.innerText = 'Belum selesai dibaca';
 		}
 	});
+
+	const inputBookForm = document.getElementById('inputBook');
+
+	inputBookForm.addEventListener('submit', function (event) {
+		event.preventDefault();
+
+		addBook();
+	});
 });
 
 document.addEventListener(RENDER_EVENT, function () {
 	const uncompletedBookList = document.getElementById('uncompleteBookshelfList');
 	uncompletedBookList.innerHTML = '';
 
+	const completedBookList = document.getElementById('completeBookshelfList');
+	completedBookList.innerHTML = '';
+
 	for (const book of books) {
 		const bookElement = makeBook(book);
-		uncompletedBookList.append(bookElement);
+
+		if (!book.isCompleted) {
+			uncompletedBookList.append(bookElement);
+		} else {
+			completedBookList.append(bookElement);
+		}
 	}
 });

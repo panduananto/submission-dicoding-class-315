@@ -4,7 +4,7 @@
 
 @layer components {
 	.primary-button {
-		@apply bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2;
+		@apply bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2;
 	}
 
 	.uncomplete-button {

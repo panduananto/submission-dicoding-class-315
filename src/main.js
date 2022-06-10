@@ -1,4 +1,5 @@
 const RENDER_EVENT = 'render-book';
+const STORAGE_KEY = 'BOOKSHELF-APP';
 
 let books = [];
 let formMode = 'CREATE';
@@ -13,7 +14,18 @@ function isStorageExist() {
 	return true;
 }
 
-function loadDataFromLocalStorage() {}
+function loadDataFromLocalStorage() {
+	const serializedData = localStorage.getItem(STORAGE_KEY);
+	let data = JSON.parse(serializedData);
+
+	if (data !== null) {
+		for (const book of data) {
+			books.push(book);
+		}
+	}
+
+	document.dispatchEvent(new Event(RENDER_EVENT));
+}
 
 function generateId() {
 	return +new Date();
@@ -75,7 +87,6 @@ function makeBookTitleAndBookAuthorTd(title, author) {
 	bookAuthorText.innerText = author;
 
 	container.append(bookTitleText, bookAuthorText);
-
 	tdElement.append(container);
 
 	return tdElement;
@@ -102,7 +113,6 @@ function makeBookActionButtonTd(bookId, isCompleted) {
 	const bookActionButton = makeBookActionButton(bookId, isCompleted);
 
 	container.append(bookActionButton);
-
 	tdElement.append(container);
 
 	return tdElement;
@@ -156,6 +166,7 @@ function removeBookFromCompleted(bookId) {
 
 	bookTarget.isCompleted = false;
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function addBookToCompleted(bookId) {
@@ -165,6 +176,7 @@ function addBookToCompleted(bookId) {
 
 	bookTarget.isCompleted = true;
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function removeBookFromCollection(bookId) {
@@ -174,6 +186,7 @@ function removeBookFromCollection(bookId) {
 
 	books.splice(bookTarget, 1);
 	document.dispatchEvent(new Event(RENDER_EVENT));
+	saveData();
 }
 
 function getBookDataToEdit(bookId) {
@@ -202,6 +215,7 @@ function addBook() {
 	document.dispatchEvent(new Event(RENDER_EVENT));
 
 	setBookFormFieldValue('', '', '', false);
+	saveData();
 }
 
 function updateBook(bookId) {
@@ -216,9 +230,17 @@ function updateBook(bookId) {
 
 	document.dispatchEvent(new Event(RENDER_EVENT));
 
-	setBookFormFieldValue('', '', '', false);
 	bookIdEdit = '';
 	formMode = 'CREATE';
+	setBookFormFieldValue('', '', '', false);
+	saveData();
+}
+
+function saveData() {
+	if (isStorageExist()) {
+		const parsed = JSON.stringify(books);
+		localStorage.setItem(STORAGE_KEY, parsed);
+	}
 }
 
 function makeBookActionButton(bookId, bookIsCompleted) {
@@ -353,8 +375,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	const inputBookIsCompleteCheckbox = document.getElementById('inputBookIsCompleteCheckbox');
 	const bookCategoryText = document.getElementById('bookCategoryText');
 
-	inputBookIsCompleteCheckbox.addEventListener('change', function () {
-		if (inputBookIsCompleteCheckbox.checked) {
+	inputBookIsCompleteCheckbox.addEventListener('change', function (event) {
+		if (event.target.checked) {
 			bookCategoryText.innerText = 'Selesai dibaca';
 		} else {
 			bookCategoryText.innerText = 'Belum selesai dibaca';

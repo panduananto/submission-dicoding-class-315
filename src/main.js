@@ -124,6 +124,11 @@ function makeCancelEditButton() {
 	return cancelEditButton;
 }
 
+function removeCancelButton() {
+	const cancelEditButton = document.getElementById('cancelEditButton');
+	cancelEditButton.remove();
+}
+
 function findBook(bookId) {
 	for (const book of books) {
 		if (book.id === bookId) {
@@ -365,6 +370,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			addBook();
 		} else {
 			updateBook(bookIdEdit);
+			removeCancelButton();
 		}
 	});
 });

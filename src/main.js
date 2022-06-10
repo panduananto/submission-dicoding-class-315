@@ -73,13 +73,13 @@ function makeTdElement(cssClass) {
 
 function makeBookTitleAndBookAuthorTd(title, author) {
 	const tdElement = makeTdElement(['pl-6', 'pr-2', 'py-6']);
-	tdElement.classList.add('w-80', 'whitespace-nowrap');
+	tdElement.classList.add('whitespace-nowrap');
 
 	const container = document.createElement('div');
-	container.classList.add('flex', 'flex-col');
+	container.classList.add('flex', 'flex-col', 'w-80');
 
 	const bookTitleText = document.createElement('p');
-	bookTitleText.classList.add('font-medium', 'text-gray-900');
+	bookTitleText.classList.add('font-medium', 'text-gray-900', 'truncate');
 	bookTitleText.innerText = title;
 
 	const bookAuthorText = document.createElement('p');
@@ -203,6 +203,16 @@ function getBookDataToEdit(bookId) {
 
 	formMode = 'UPDATE';
 	bookIdEdit = id;
+}
+
+function searchBook(title) {
+	const searchedBook = books.filter(function (book) {
+		const bookName = book.bookTitle.toLowerCase();
+
+		return bookName.includes(title.toLowerCase());
+	});
+
+	document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
 function addBook() {
@@ -381,6 +391,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		} else {
 			bookCategoryText.innerText = 'Belum selesai dibaca';
 		}
+	});
+
+	const inputBookSearch = document.getElementById('searchBookTitle');
+
+	inputBookSearch.addEventListener('keyup', function (event) {
+		searchBook(event.target.value);
 	});
 
 	const inputBookForm = document.getElementById('inputBook');

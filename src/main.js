@@ -106,7 +106,7 @@ function makeBookYearTd(year) {
 }
 
 function makeBookActionButtonTd(bookId, isCompleted) {
-	const tdElement = makeTdElement(['px-2', 'py-6']);
+	const tdElement = makeTdElement(['px-2', 'py-6', 'whitespace-nowrap']);
 
 	const container = document.createElement('div');
 	container.classList.add('flex', 'justify-center');
@@ -306,7 +306,7 @@ function makeBookActionButton(bookId, bookIsCompleted) {
 }
 
 function makeActionButtonTd(bookId) {
-	const tdElement = makeTdElement(['pl-2', 'pr-6', 'py-6']);
+	const tdElement = makeTdElement(['pl-2', 'pr-6', 'py-6', 'whitespace-nowrap']);
 	const actionButton = makeActionButton(bookId);
 
 	tdElement.append(actionButton);

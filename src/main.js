@@ -4,6 +4,7 @@ const STORAGE_KEY = 'BOOKSHELF-APP';
 let books = [];
 let formMode = 'CREATE';
 let bookIdEdit = '';
+let searchTerm = '';
 
 function isStorageExist() {
 	if (typeof Storage === undefined) {
@@ -212,7 +213,7 @@ function searchBook(title) {
 		return bookName.includes(title.toLowerCase());
 	});
 
-	document.dispatchEvent(new Event(RENDER_EVENT));
+	return searchedBook;
 }
 
 function addBook() {
@@ -396,7 +397,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	const inputBookSearch = document.getElementById('searchBookTitle');
 
 	inputBookSearch.addEventListener('keyup', function (event) {
-		searchBook(event.target.value);
+		searchTerm = event.target.value;
+		document.dispatchEvent(new Event(RENDER_EVENT));
 	});
 
 	const inputBookForm = document.getElementById('inputBook');
@@ -415,12 +417,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener(RENDER_EVENT, function () {
 	const uncompletedBookList = document.getElementById('uncompleteBookshelfList');
-	uncompletedBookList.innerHTML = '';
-
 	const completedBookList = document.getElementById('completeBookshelfList');
+
+	uncompletedBookList.innerHTML = '';
 	completedBookList.innerHTML = '';
 
-	for (const book of books) {
+	for (const book of searchBook(searchTerm)) {
 		const bookElement = makeBook(book);
 
 		if (!book.isCompleted) {

@@ -401,6 +401,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.dispatchEvent(new Event(RENDER_EVENT));
 	});
 
+	const clearSearchButton = document.getElementById('clearSearch');
+
+	clearSearchButton.addEventListener('click', function () {
+		searchTerm = '';
+		inputBookSearch.value = '';
+		document.dispatchEvent(new Event(RENDER_EVENT));
+	});
+
 	const inputBookForm = document.getElementById('inputBook');
 
 	inputBookForm.addEventListener('submit', function (event) {
